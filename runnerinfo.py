@@ -180,5 +180,5 @@ runner_info = get_runner_info()
 print("\nRunner info collected successfully:")
 print(runner_info)
 
-sample_week1 = generate_sample_week(runner_info, 1)
-print_sample_week(sample_week1)
+sample_week1 = generate_sample_week(runner_info)
+print_sample_week(sample_week1, 1)
