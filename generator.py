@@ -59,4 +59,26 @@ def should_include_workout(runner_info):
     return False
 
 
+# This function chooses a reasonable long run distance.
+# It starts near the runner's current longest run and builds slightly.
+def choose_long_run_distance(runner_info):
+    weekly_mileage = runner_info["weekly_mileage"]
+    longest_run = runner_info["longest_run"]
+    weeks_until_race = runner_info["weeks_until_race"]
 
+    long_run = longest_run + 1
+
+    # Keep the long run from becoming too large compared to total weekly mileage.
+    max_long_run = weekly_mileage * 0.45
+    if long_run > max_long_run:
+        long_run = max_long_run
+
+    # If there is not much time until the race, stay more conservative.
+    if weeks_until_race < 3:
+        long_run = min(long_run, longest_run)
+
+    # Keep a minimum long run distance for the plan.
+    if long_run < 3:
+        long_run = 3
+
+    return round(long_run, 1)
