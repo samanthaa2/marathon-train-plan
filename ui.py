@@ -85,4 +85,15 @@ def generate_plan():
 
 
 ### INITIALIZE SCREEN 1: BASIC TRAINING BACKGROUND
+screen1_frame = ctk.CTkFrame(app)
+
+screen1_title = ctk.CTkLabel(screen1_frame, text = "Step 1: Current Training", font = ("Arial", 24))
+screen1_title.pack(pady=20)
+
+weekly_mileage_label = ctk.CTkLabel(screen1_frame, text = "How many miles are you currently running per week?")
+weekly_mileage_label.pack(pady = (10,5))
+
+weekly_mileage_entry = ctk.CTkEntry(screen1_frame, width = 250)
+weekly_mileage_entry.pack(pady=5)
+
 
