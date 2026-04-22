@@ -123,6 +123,44 @@ def go_to_screen3():
             text="Please enter valid values before continuing."
         )
 
+# off day screen
+def save_off_days_and_continue():
+    off_days = []
+
+    if monday_var.get():
+        off_days.append("Monday")
+    if tuesday_var.get():
+        off_days.append("Tuesday")
+    if wednesday_var.get():
+        off_days.append("Wednesday")
+    if thursday_var.get():
+        off_days.append("Thursday")
+    if friday_var.get():
+        off_days.append("Friday")
+    if saturday_var.get():
+        off_days.append("Saturday")
+    if sunday_var.get():
+        off_days.append("Sunday")
+
+    long_run_day = runner_info["long_run_day"]
+    running_days = runner_info["running_days"]
+
+    if long_run_day in off_days:
+        off_days_error_label.configure(
+            text="Your long run day cannot also be an off day."
+        )
+        return
+
+    if len(off_days) > 7 - running_days:
+        off_days_error_label.configure(
+            text="You selected too many off days for your available running days."
+        )
+        return
+
+    runner_info["off_days"] = off_days
+    off_days_error_label.configure(text="")
+    show_screen3()
+
 
 # Save screen 3 data, generate the plan, and show the results.
 def generate_plan():
