@@ -27,12 +27,20 @@ def init_pace_targets(runnerinfo):
     pace_targets = {
         "easy": (format_pace(average_pace+.5),
                  format_pace(average_pace + 1.5)
-                 ),
+        ),
         "long": (format_pace(average_pace + .75),
                  format_pace(average_pace + 1.75)
-                 ),
-        "workout": ()
+        ),
+        "workout": (
+            format_pace(max(average_pace - 0.25, 0.1)),
+            format_pace(average_pace + 0.25)
+        )
     }
+
+    return pace_targets
+
+
+
 
 
 
