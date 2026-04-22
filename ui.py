@@ -25,6 +25,7 @@ runner_info = {}
 def hide_all_frames():
     screen1_frame.pack_forget()
     screen2_frame.pack_forget()
+    off_days_frame.pack_forget()
     screen3_frame.pack_forget()
     results_frame.pack_forget()
 
@@ -38,6 +39,11 @@ def show_screen1():
 def show_screen2():
     hide_all_frames()
     screen2_frame.pack(fill="both", expand=True, padx=20, pady=20)
+
+
+def show_off_days_screen():
+    hide_all_frames()
+    off_days_frame.pack(fill="both", expand=True, padx=20, pady=20)
 
 
 def show_screen3():
@@ -86,7 +92,7 @@ def go_to_screen2():
         )
 
 
-# Save screen 2 data, then move to screen 3.
+# Save screen 2 data, then move to screen 3 OR select off days depending on inputs.
 def go_to_screen3():
     try:
         running_days = int(running_days_entry.get())
@@ -99,42 +105,18 @@ def go_to_screen3():
             )
             return
 
-        off_days = []
-        if off_days_menu.get() == "yes":
-            if monday_var.get():
-                off_days.append("Monday")
-            if tuesday_var.get():
-                off_days.append("Tuesday")
-            if wednesday_var.get():
-                off_days.append("Wednesday")
-            if thursday_var.get():
-                off_days.append("Thursday")
-            if friday_var.get():
-                off_days.append("Friday")
-            if saturday_var.get():
-                off_days.append("Saturday")
-            if sunday_var.get():
-                off_days.append("Sunday")
-
-        if long_run_day in off_days:
-            screen2_error_label.configure(
-                text="Your long run day cannot also be an off day."
-            )
-            return
-
-        if len(off_days) > 7 - running_days:
-            screen2_error_label.configure(
-                text="You selected too many off days for your available running days."
-            )
-            return
-
         runner_info["running_days"] = running_days
         runner_info["weeks_until_race"] = weeks_until_race
         runner_info["long_run_day"] = long_run_day
-        runner_info["off_days"] = off_days
 
         screen2_error_label.configure(text="")
-        show_screen3()
+
+        # Decide whether to show the off-days screen.
+        if off_days_menu.get() == "yes":
+            show_off_days_screen()
+        else:
+            runner_info["off_days"] = []
+            show_screen3()
 
     except ValueError:
         screen2_error_label.configure(
