@@ -18,7 +18,21 @@ def format_pace(pace):
     return f"{minutes}:{seconds:02}/mile"
 
 # this function defines pace target windows for the first week based on the initial information presented
+# the pace target windows are spread across 3 workout types: easy run, long run, and workout
+# returns pace targets as a dictionary
 def init_pace_targets(runnerinfo):
+    average_pace = runnerinfo["average_pace"]
+
+    # easy runs and long runs should aim slower than average pace; workout runs are faster
+    pace_targets = {
+        "easy": (format_pace(average_pace+.5),
+                 format_pace(average_pace + 1.5)
+                 ),
+        "long": (format_pace(average_pace + .75),
+                 format_pace(average_pace + 1.75)
+                 ),
+        "workout": ()
+    }
 
 
 
