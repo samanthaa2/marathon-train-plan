@@ -145,7 +145,7 @@ def generate_baseline_week(runner_info):
     off_days = runner_info["off_days"]
     running_days = runner_info["running_days"]
 
-    pace_targets = get_pace_targets(runner_info)
+    pace_targets = init_pace_targets(runner_info)
 
     # Start by setting every day to rest.
     schedule = {}
