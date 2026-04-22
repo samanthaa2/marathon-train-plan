@@ -10,113 +10,43 @@ app = ctk.CTk()
 app.title("Marathon Training Plan Generator")
 app.geometry("800x650")
 
+# create the runner dictionary to store the runner data
+runner_info = {}
 
-# This function collects all user inputs from the interface.
-def collect_runner_info():
-    runner_info = {
-        "weekly_mileage": weekly_mileage_entry.get(),
-        "longest_run": longest_run_entry.get(),
-        "average_pace": average_pace_entry.get(),
-        "running_days": running_days_entry.get(),
-        "goal": goal_menu.get()
-    }
-    return runner_info
+# create a function to hide all frames so only one screen is visible at a time
+def hide_all_frames():
+    screen1_frame.pack_forget()
+    screen2_frame.pack_forget()
+    results_frame.pack_forget()
 
+# create a function that shows the first screen
+def show_screen1():
+    hide_all_frames()
+    screen1_frame.pack(fill = 'both', expand = True, padx = 20, pady = 20)
 
-# This function runs when the button is clicked.
-# It collects the inputs and displays them in the output box.
-def button_clicked():
-    runner_info = collect_runner_info()
-
-    output_box.delete("1.0", "end")
-    output_box.insert("1.0", f"Collected runner info:\n{runner_info}")
+# function to how second screen
+def show_screen2():
+    hide_all_frames()
+    screen2_frame.pack(fill = 'both', expand = True, padx = 20, pady = 20)
 
 
-# Title label
-title_label = ctk.CTkLabel(
-    app,
-    text="Marathon Training Plan Generator",
-    font=("Arial", 24)
-)
-title_label.pack(pady=20)
+# function to show results
+def show_results():
+    hide_all_frames()
+    results_frame.pack(fill="both", expand=True, padx=20, pady=20)
 
+# Function to save data from screen 1 and move to screen 2;
+# called when next button on screen 1 is pressed
+def go_to_screen2():
+    try:
+        runner_info["weekly_mileage"] = float(weekly_mileage_entry.get())
+        runner_info["longest_run"] = float(longest_run_entry.get())
+        runner_info["average_pace"] = float(average_pace_entry.get())
 
-# Weekly mileage input
-weekly_mileage_label = ctk.CTkLabel(
-    app,
-    text="How many miles are you currently running per week?"
-)
-weekly_mileage_label.pack(pady=(10, 5))
+        show_screen2()
+    except ValueError:
+        screen1_error_label.configure(
+            text = 'Please enate valid numbers for all fields.'
+        )
 
-weekly_mileage_entry = ctk.CTkEntry(app, width=250)
-weekly_mileage_entry.pack(pady=5)
-
-
-# Longest run input
-longest_run_label = ctk.CTkLabel(
-    app,
-    text="What is your longest recent run (in miles)?"
-)
-longest_run_label.pack(pady=(10, 5))
-
-longest_run_entry = ctk.CTkEntry(app, width=250)
-longest_run_entry.pack(pady=5)
-
-
-# Average pace input
-average_pace_label = ctk.CTkLabel(
-    app,
-    text="What is your average pace in minutes per mile?"
-)
-average_pace_label.pack(pady=(10, 5))
-
-average_pace_entry = ctk.CTkEntry(app, width=250)
-average_pace_entry.pack(pady=5)
-
-
-# Running days input
-running_days_label = ctk.CTkLabel(
-    app,
-    text="How many days per week can you run?"
-)
-running_days_label.pack(pady=(10, 5))
-
-running_days_entry = ctk.CTkEntry(app, width=250)
-running_days_entry.pack(pady=5)
-
-
-# Goal dropdown
-goal_label = ctk.CTkLabel(
-    app,
-    text="What is your goal?"
-)
-goal_label.pack(pady=(10, 5))
-
-goal_menu = ctk.CTkOptionMenu(
-    app,
-    values=["finish", "improve time"],
-    width=250
-)
-goal_menu.pack(pady=5)
-
-
-# Submit button
-submit_button = ctk.CTkButton(
-    app,
-    text="Submit",
-    command=button_clicked
-)
-submit_button.pack(pady=20)
-
-
-# Output textbox
-output_box = ctk.CTkTextbox(
-    app,
-    width=600,
-    height=180
-)
-output_box.pack(pady=20)
-
-
-# Start the app
-app.mainloop()
+    
