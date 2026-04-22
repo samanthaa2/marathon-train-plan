@@ -282,44 +282,7 @@ off_days_menu = ctk.CTkOptionMenu(
 )
 off_days_menu.pack(pady=5)
 
-# This frame holds the weekday checkboxes and is shown only if needed.
-off_days_frame = ctk.CTkFrame(screen2_frame)
 
-off_days_frame_label = ctk.CTkLabel(
-    off_days_frame,
-    text="Select your off days:"
-)
-off_days_frame_label.pack(pady=(10, 5))
-
-# Create BooleanVars for each weekday checkbox.
-monday_var = tk.BooleanVar()
-tuesday_var = tk.BooleanVar()
-wednesday_var = tk.BooleanVar()
-thursday_var = tk.BooleanVar()
-friday_var = tk.BooleanVar()
-saturday_var = tk.BooleanVar()
-sunday_var = tk.BooleanVar()
-
-monday_check = ctk.CTkCheckBox(off_days_frame, text="Monday", variable=monday_var)
-monday_check.pack(anchor="w", padx=20, pady=2)
-
-tuesday_check = ctk.CTkCheckBox(off_days_frame, text="Tuesday", variable=tuesday_var)
-tuesday_check.pack(anchor="w", padx=20, pady=2)
-
-wednesday_check = ctk.CTkCheckBox(off_days_frame, text="Wednesday", variable=wednesday_var)
-wednesday_check.pack(anchor="w", padx=20, pady=2)
-
-thursday_check = ctk.CTkCheckBox(off_days_frame, text="Thursday", variable=thursday_var)
-thursday_check.pack(anchor="w", padx=20, pady=2)
-
-friday_check = ctk.CTkCheckBox(off_days_frame, text="Friday", variable=friday_var)
-friday_check.pack(anchor="w", padx=20, pady=2)
-
-saturday_check = ctk.CTkCheckBox(off_days_frame, text="Saturday", variable=saturday_var)
-saturday_check.pack(anchor="w", padx=20, pady=2)
-
-sunday_check = ctk.CTkCheckBox(off_days_frame, text="Sunday", variable=sunday_var)
-sunday_check.pack(anchor="w", padx=20, pady=2)
 
 screen2_error_label = ctk.CTkLabel(
     screen2_frame,
@@ -342,6 +305,75 @@ screen2_next_button = ctk.CTkButton(
 )
 screen2_next_button.pack(pady=10)
 
+# -------------------------
+# OFF DAYS SCREEN
+# -------------------------
+
+off_days_frame = ctk.CTkFrame(app)
+
+off_days_title = ctk.CTkLabel(
+    off_days_frame,
+    text="Step 3: Required Off Days",
+    font=("Arial", 24)
+)
+off_days_title.pack(pady=20)
+
+off_days_label = ctk.CTkLabel(
+    off_days_frame,
+    text="Select any days you need to keep free from running:"
+)
+off_days_label.pack(pady=(10, 10))
+
+# Create checkbox variables.
+monday_var = tk.BooleanVar()
+tuesday_var = tk.BooleanVar()
+wednesday_var = tk.BooleanVar()
+thursday_var = tk.BooleanVar()
+friday_var = tk.BooleanVar()
+saturday_var = tk.BooleanVar()
+sunday_var = tk.BooleanVar()
+
+monday_check = ctk.CTkCheckBox(off_days_frame, text="Monday", variable=monday_var)
+monday_check.pack(anchor="w", padx=40, pady=2)
+
+tuesday_check = ctk.CTkCheckBox(off_days_frame, text="Tuesday", variable=tuesday_var)
+tuesday_check.pack(anchor="w", padx=40, pady=2)
+
+wednesday_check = ctk.CTkCheckBox(off_days_frame, text="Wednesday", variable=wednesday_var)
+wednesday_check.pack(anchor="w", padx=40, pady=2)
+
+thursday_check = ctk.CTkCheckBox(off_days_frame, text="Thursday", variable=thursday_var)
+thursday_check.pack(anchor="w", padx=40, pady=2)
+
+friday_check = ctk.CTkCheckBox(off_days_frame, text="Friday", variable=friday_var)
+friday_check.pack(anchor="w", padx=40, pady=2)
+
+saturday_check = ctk.CTkCheckBox(off_days_frame, text="Saturday", variable=saturday_var)
+saturday_check.pack(anchor="w", padx=40, pady=2)
+
+sunday_check = ctk.CTkCheckBox(off_days_frame, text="Sunday", variable=sunday_var)
+sunday_check.pack(anchor="w", padx=40, pady=2)
+
+off_days_error_label = ctk.CTkLabel(
+    off_days_frame,
+    text="",
+    text_color="red"
+)
+off_days_error_label.pack(pady=10)
+
+off_days_back_button = ctk.CTkButton(
+    off_days_frame,
+    text="Back",
+    command=show_screen2
+)
+off_days_back_button.pack(pady=(10, 5))
+
+off_days_next_button = ctk.CTkButton(
+    off_days_frame,
+    text="Next",
+    command=save_off_days_and_continue
+)
+off_days_next_button.pack(pady=10)
 
 # -------------------------
 # SCREEN 3: GOAL
