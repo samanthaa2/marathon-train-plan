@@ -1,5 +1,6 @@
 import customtkinter as ctk
-
+# import/connect the ui to our plan generator
+from generator import generate_baseline_week
 # Set the appearance and color theme of the app.
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme("blue")
