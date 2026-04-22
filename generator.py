@@ -96,13 +96,17 @@ def choose_weekly_mileage(runner_info):
     return round(weekly_mileage, 1)
 
 # This function returns the day before a given weekday.
-def get_previous_day(day, days):
+def get_previous_day(day):
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     index = days.index(day)
     return days[index - 1]
 
 # This function returns the day after a given weekday.
-def get_next_day(day, days):
+def get_next_day(day):
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     index = days.index(day)
     return days[(index + 1) % len(days)]
 
-
+# this function assigns workouts to specific days for the first week
+# it takes into account rest days and long run days, and attempts to optimize spacing
+def choose_workout_day(runnerinfo):
