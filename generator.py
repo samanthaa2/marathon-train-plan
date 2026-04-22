@@ -24,6 +24,8 @@ def init_pace_targets(runnerinfo):
     average_pace = runnerinfo["average_pace"]
 
     # easy runs and long runs should aim slower than average pace; workout runs are faster
+    # NOTE: these only apply to the construction of the initial plan, which considers potential inconsistencies
+    # or exaggeration in the information provided by the user
     pace_targets = {
         "easy": (format_pace(average_pace+.5),
                  format_pace(average_pace + 1.5)
@@ -40,7 +42,21 @@ def init_pace_targets(runnerinfo):
     return pace_targets
 
 
+# This function decides whether the runner should get a workout day.
+# Finish-focused plans are more conservative.
+def should_include_workout(runner_info):
+    goal = runner_info["goal"]
+    running_days = runner_info["running_days"]
+    weekly_mileage = runner_info["weekly_mileage"]
+    weeks_until_race = runner_info["weeks_until_race"]
 
+    if goal == "finish":
+        return running_days >= 5 and weekly_mileage >= 20 and weeks_until_race >= 8
+
+    if goal == "improve time":
+        return running_days >= 4 and weekly_mileage >= 15 and weeks_until_race >= 6
+
+    return False
 
 
 
