@@ -101,120 +101,171 @@ def get_previous_day(day):
     index = days.index(day)
     return days[index - 1]
 
+
 # This function returns the day after a given weekday.
 def get_next_day(day):
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     index = days.index(day)
     return days[(index + 1) % len(days)]
 
-# This function tries to place a workout day away from the long run.
-def choose_workout_day(runner_info, available_days):
-    long_run_day = runner_info["long_run_day"]
+
+# This function builds the structure of the week by assigning each day a run type.
+# It does not assign distances or paces yet.
+def build_week_structure(runner_info):
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
-    day_before_long = get_previous_day(long_run_day, days)
-    day_after_long = get_next_day(long_run_day, days)
-
-    good_days = []
-    for day in available_days:
-        if day != day_before_long and day != day_after_long:
-            good_days.append(day)
-
-    # Prefer midweek days if possible.
-    preferred_order = ["Tuesday", "Wednesday", "Thursday", "Friday", "Monday", "Saturday"]
-
-    for day in preferred_order:
-        if day in good_days:
-            return day
-
-    for day in preferred_order:
-        if day in available_days:
-            return day
-
-    return None
-
-
-# This function generates a baseline week.
-# It returns a dictionary with weekdays as keys and workout descriptions as values.
-def generate_baseline_week(runner_info):
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
-    weekly_mileage = choose_weekly_mileage(runner_info)
-    long_run_distance = choose_long_run_distance(runner_info)
-    long_run_day = runner_info["long_run_day"]
-    off_days = runner_info["off_days"]
     running_days = runner_info["running_days"]
+    off_days = runner_info["off_days"]
+    long_run_day = runner_info["long_run_day"]
 
-    pace_targets = init_pace_targets(runner_info)
-
-    # Start by setting every day to rest.
-    schedule = {}
+    # Start with all days set to rest.
+    structure = {}
     for day in days:
-        schedule[day] = "Rest"
+        structure[day] = "rest"
 
-    # Mark required off days first.
+    # Mark off days as rest.
     for day in off_days:
-        schedule[day] = "Rest"
+        structure[day] = "rest"
 
-    # Place the long run.
-    long_pace_low, long_pace_high = pace_targets["long"]
-    schedule[long_run_day] = (
-        f"{long_run_distance} mile long run "
-        f"at about {long_pace_low} to {long_pace_high}"
-    )
-
+    # Place the long run first.
+    structure[long_run_day] = "long"
     run_days_used = 1
 
-    # Find days available for more runs.
-    available_days = []
-    for day in days:
-        if day not in off_days and day != long_run_day:
-            available_days.append(day)
-
-    # Decide whether to include a workout day.
+    # Decide whether this runner should get a workout day.
     workout_day = None
-    workout_distance = 0
-
     if should_include_workout(runner_info):
-        workout_day = choose_workout_day(runner_info, available_days)
+        preferred_workout_order = ["Tuesday", "Thursday", "Monday", "Friday", "Saturday", "Sunday", "Wednesday"]
+
+        day_before_long = get_previous_day(long_run_day)
+        day_after_long = get_next_day(long_run_day)
+
+        # First try to place the workout away from the long run.
+        for day in preferred_workout_order:
+            if (
+                day != long_run_day
+                and day not in off_days
+                and day != day_before_long
+                and day != day_after_long
+                and structure[day] == "rest"
+            ):
+                workout_day = day
+                break
+
+        # If that is not possible, choose the best remaining day.
+        if workout_day is None:
+            for day in preferred_workout_order:
+                if day != long_run_day and day not in off_days and structure[day] == "rest":
+                    workout_day = day
+                    break
 
         if workout_day is not None:
-            workout_distance = round(max(3, weekly_mileage * 0.2), 1)
-            workout_pace_low, workout_pace_high = pace_targets["workout"]
-            schedule[workout_day] = (
-                f"{workout_distance} mile workout "
-                f"at about {workout_pace_low} to {workout_pace_high}"
-            )
+            structure[workout_day] = "workout"
             run_days_used += 1
-            available_days.remove(workout_day)
 
-    # Figure out how many easy runs remain.
+    # Fill the rest of the needed run days with easy runs.
     easy_runs_needed = running_days - run_days_used
 
-    # Choose days for easy runs in weekday order.
-    easy_run_days = available_days[:easy_runs_needed]
+    while easy_runs_needed > 0:
+        best_day = None
+        best_score = None
 
-    # Calculate how many miles remain after assigning long run and workout.
+        for day in days:
+            if structure[day] != "rest":
+                continue
+            if day in off_days:
+                continue
+
+            prev_day = get_previous_day(day)
+            next_day = get_next_day(day)
+
+            # Count how many neighboring days already have runs.
+            neighbor_runs = 0
+            if structure[prev_day] != "rest":
+                neighbor_runs += 1
+            if structure[next_day] != "rest":
+                neighbor_runs += 1
+
+            # Lower score is better because it means the run is less crowded.
+            score = neighbor_runs
+
+            if best_score is None or score < best_score:
+                best_score = score
+                best_day = day
+
+        if best_day is None:
+            break
+
+        structure[best_day] = "easy"
+        easy_runs_needed -= 1
+
+    return structure
+
+
+# This function generates the full baseline week by taking the weekly structure
+# and assigning distances and pace targets to each run.
+def generate_baseline_week(runner_info):
+    weekly_mileage = choose_weekly_mileage(runner_info)
+    long_run_distance = choose_long_run_distance(runner_info)
+    pace_targets = init_pace_targets(runner_info)
+
+    structure = build_week_structure(runner_info)
+
+    # Count how many easy runs and workout runs there are.
+    easy_days = []
+    workout_days = []
+
+    for day, run_type in structure.items():
+        if run_type == "easy":
+            easy_days.append(day)
+        elif run_type == "workout":
+            workout_days.append(day)
+
+    # Choose workout distance if there is a workout.
+    if len(workout_days) > 0:
+        workout_distance = round(max(3, weekly_mileage * 0.2), 1)
+    else:
+        workout_distance = 0
+
+    # Divide remaining mileage across easy runs.
     remaining_miles = weekly_mileage - long_run_distance - workout_distance
 
-    if easy_runs_needed > 0:
-        easy_run_distance = round(remaining_miles / easy_runs_needed, 1)
+    if len(easy_days) > 0:
+        easy_run_distance = round(remaining_miles / len(easy_days), 1)
     else:
         easy_run_distance = 0
 
-    # Keep easy runs from dropping too low.
-    if easy_runs_needed > 0 and easy_run_distance < 2:
+    if len(easy_days) > 0 and easy_run_distance < 2:
         easy_run_distance = 2
 
-    easy_pace_low, easy_pace_high = pace_targets["easy"]
+    # Build the final schedule text.
+    final_schedule = {}
 
-    for day in easy_run_days:
-        schedule[day] = (
-            f"{easy_run_distance} mile easy run "
-            f"at about {easy_pace_low} to {easy_pace_high}"
-        )
+    for day, run_type in structure.items():
+        if run_type == "rest":
+            final_schedule[day] = "Rest"
 
-    return schedule
+        elif run_type == "long":
+            long_pace_low, long_pace_high = pace_targets["long"]
+            final_schedule[day] = (
+                f"{long_run_distance} mile long run "
+                f"at about {long_pace_low} to {long_pace_high}"
+            )
+
+        elif run_type == "workout":
+            workout_pace_low, workout_pace_high = pace_targets["workout"]
+            final_schedule[day] = (
+                f"{workout_distance} mile workout "
+                f"at about {workout_pace_low} to {workout_pace_high}"
+            )
+
+        elif run_type == "easy":
+            easy_pace_low, easy_pace_high = pace_targets["easy"]
+            final_schedule[day] = (
+                f"{easy_run_distance} mile easy run "
+                f"at about {easy_pace_low} to {easy_pace_high}"
+            )
+
+    return final_schedule
 
 
 # This function prints the generated week in a readable format.
