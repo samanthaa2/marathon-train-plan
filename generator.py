@@ -110,3 +110,9 @@ def get_next_day(day):
 # this function assigns workouts to specific days for the first week
 # it takes into account rest days and long run days, and attempts to optimize spacing
 def choose_workout_day(runnerinfo):
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    rest_days = runnerinfo["off_days"]
+    long_run = runnerinfo["long_run_day"]
+
+    available_days = days not in rest_days
+    long_run_idx = available_days.getindex(long_run)
