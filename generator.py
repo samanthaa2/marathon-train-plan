@@ -74,7 +74,7 @@ def choose_long_run_distance(runner_info):
         long_run = max_long_run
 
     # If there is not much time until the race, stay more conservative.
-    if weeks_until_race < 3:
+    if weeks_until_race < 6:
         long_run = min(long_run, longest_run)
 
     # Keep a minimum long run distance for the plan.
@@ -82,3 +82,5 @@ def choose_long_run_distance(runner_info):
         long_run = 3
 
     return round(long_run, 1)
+
+
