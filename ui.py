@@ -24,7 +24,7 @@ generate_button = ctk. CTkButton(app, text = "Generate Plan", command = button_c
 generate_button.pack(pady = 10)
 
 # create a text box where the output will be displayed
-output_box = ctk.CTkTextBox(app, width = 500, height = 250)
+output_box = ctk.CTkTextbox(app, width = 500, height = 250)
 output_box.pack(pady = 20)
 
 # start the app
