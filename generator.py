@@ -83,4 +83,26 @@ def choose_long_run_distance(runner_info):
 
     return round(long_run, 1)
 
+# This function chooses a target weekly mileage for the baseline week.
+# For now, it mostly keeps the runner near their current mileage.
+def choose_weekly_mileage(runner_info):
+    weekly_mileage = runner_info["weekly_mileage"]
+    weeks_until_race = runner_info["weeks_until_race"]
+
+    # Build slightly if there is enough time.
+    if weeks_until_race >= 10:
+        weekly_mileage *= 1.05
+
+    return round(weekly_mileage, 1)
+
+# This function returns the day before a given weekday.
+def get_previous_day(day, days):
+    index = days.index(day)
+    return days[index - 1]
+
+# This function returns the day after a given weekday.
+def get_next_day(day, days):
+    index = days.index(day)
+    return days[(index + 1) % len(days)]
+
 
