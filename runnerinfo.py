@@ -165,5 +165,4 @@ def get_runner_info():
         "long_run_day": long_run_day
     }
 
-runner1 = get_runner_info()
-print(runner1)
+
