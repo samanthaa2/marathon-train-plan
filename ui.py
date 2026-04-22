@@ -65,12 +65,14 @@ def toggle_time_goal_input(choice):
         time_goal_label.pack_forget()
         time_goal_entry.pack_forget()
 
-# This function shows or hides the off-day checkboxes.
-def toggle_off_days_input(choice):
-    if choice == "yes":
-        off_days_frame.pack(pady=10)
+
+# This function decides where the Back button on the goal screen should go.
+def go_back_from_screen3():
+    if off_days_menu.get() == "yes":
+        show_off_days_screen()
     else:
-        off_days_frame.pack_forget()
+        show_screen2()
+
 
 # -------------------------
 # NAVIGATION FUNCTIONS
@@ -92,7 +94,7 @@ def go_to_screen2():
         )
 
 
-# Save screen 2 data, then move to screen 3 OR select off days depending on inputs.
+# Save screen 2 data, then move to the off-days screen or goal screen.
 def go_to_screen3():
     try:
         running_days = int(running_days_entry.get())
@@ -123,7 +125,8 @@ def go_to_screen3():
             text="Please enter valid values before continuing."
         )
 
-# off day screen
+
+# Save selected off days, then continue to the goal screen.
 def save_off_days_and_continue():
     off_days = []
 
@@ -179,7 +182,6 @@ def generate_plan():
                 return
 
             runner_info["time_goal"] = time_goal
-
         else:
             runner_info["time_goal"] = None
 
@@ -305,7 +307,6 @@ long_run_day_menu = ctk.CTkOptionMenu(
 )
 long_run_day_menu.pack(pady=5)
 
-# Ask whether the runner has required off days.
 off_days_question_label = ctk.CTkLabel(
     screen2_frame,
     text="Do you have any required off days?"
@@ -315,12 +316,9 @@ off_days_question_label.pack(pady=(15, 5))
 off_days_menu = ctk.CTkOptionMenu(
     screen2_frame,
     values=["no", "yes"],
-    width=250,
-    command=toggle_off_days_input
+    width=250
 )
 off_days_menu.pack(pady=5)
-
-
 
 screen2_error_label = ctk.CTkLabel(
     screen2_frame,
@@ -342,6 +340,7 @@ screen2_next_button = ctk.CTkButton(
     command=go_to_screen3
 )
 screen2_next_button.pack(pady=10)
+
 
 # -------------------------
 # OFF DAYS SCREEN
@@ -413,6 +412,7 @@ off_days_next_button = ctk.CTkButton(
 )
 off_days_next_button.pack(pady=10)
 
+
 # -------------------------
 # SCREEN 3: GOAL
 # -------------------------
@@ -421,7 +421,7 @@ screen3_frame = ctk.CTkFrame(app)
 
 screen3_title = ctk.CTkLabel(
     screen3_frame,
-    text="Step 3: Goal",
+    text="Step 4: Goal",
     font=("Arial", 24)
 )
 screen3_title.pack(pady=20)
@@ -461,7 +461,7 @@ screen3_error_label.pack(pady=10)
 screen3_back_button = ctk.CTkButton(
     screen3_frame,
     text="Back",
-    command=show_screen2
+    command=go_back_from_screen3
 )
 screen3_back_button.pack(pady=(10, 5))
 
