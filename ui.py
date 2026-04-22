@@ -93,12 +93,45 @@ def go_to_screen3():
         weeks_until_race = int(weeks_until_race_entry.get())
         long_run_day = long_run_day_menu.get()
 
+        if running_days < 1 or running_days > 7:
+            screen2_error_label.configure(
+                text="Running days must be between 1 and 7."
+            )
+            return
+
+        off_days = []
+        if off_days_menu.get() == "yes":
+            if monday_var.get():
+                off_days.append("Monday")
+            if tuesday_var.get():
+                off_days.append("Tuesday")
+            if wednesday_var.get():
+                off_days.append("Wednesday")
+            if thursday_var.get():
+                off_days.append("Thursday")
+            if friday_var.get():
+                off_days.append("Friday")
+            if saturday_var.get():
+                off_days.append("Saturday")
+            if sunday_var.get():
+                off_days.append("Sunday")
+
+        if long_run_day in off_days:
+            screen2_error_label.configure(
+                text="Your long run day cannot also be an off day."
+            )
+            return
+
+        if len(off_days) > 7 - running_days:
+            screen2_error_label.configure(
+                text="You selected too many off days for your available running days."
+            )
+            return
+
         runner_info["running_days"] = running_days
         runner_info["weeks_until_race"] = weeks_until_race
         runner_info["long_run_day"] = long_run_day
-
-        # For now, off_days is kept simple.
-        runner_info["off_days"] = []
+        runner_info["off_days"] = off_days
 
         screen2_error_label.configure(text="")
         show_screen3()
