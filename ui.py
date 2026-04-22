@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import tkinter as tk
 
 # Import the function that generates the baseline week from your planning file.
 from generator import generate_baseline_week
@@ -58,6 +59,12 @@ def toggle_time_goal_input(choice):
         time_goal_label.pack_forget()
         time_goal_entry.pack_forget()
 
+# This function shows or hides the off-day checkboxes.
+def toggle_off_days_input(choice):
+    if choice == "yes":
+        off_days_frame.pack(pady=10)
+    else:
+        off_days_frame.pack_forget()
 
 # -------------------------
 # NAVIGATION FUNCTIONS
