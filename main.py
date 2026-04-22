@@ -1,8 +1,8 @@
 # the file where the code is run
 
 # first, import relative functions
-from runner_info import get_runner_info
-from plan_generator import generate_baseline_week, print_week_plan
+from runnerinfo import get_runner_info
+from generator import generate_baseline_week, print_week_plan
 
 runner_info = get_runner_info()
 
