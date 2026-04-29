@@ -257,6 +257,23 @@ def generate_plan():
 def generate_next_week():
     global runner_info, current_week_plan, workout_log, current_week_number
 
+    # Stop generating new weeks once the race week has ended.
+    if runner_info["weeks_until_race"] <= 1:
+        for widget in workout_buttons_frame.winfo_children():
+            widget.destroy()
+
+        week_title_label.configure(text="Training Complete")
+
+        done_label = ctk.CTkLabel(
+            workout_buttons_frame,
+            text="Your race week has ended. No more training weeks can be generated.",
+            font=("Arial", 18)
+        )
+        done_label.pack(pady=20)
+
+        next_week_button.configure(state="disabled")
+        return
+
     # Update the runner info based on completed workouts.
     runner_info = update_runner_info(runner_info, workout_log)
 
