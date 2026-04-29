@@ -203,6 +203,7 @@ def build_week_structure(runner_info):
 
 # This function generates the full baseline week by taking the weekly structure
 # and assigning distances and pace targets to each run.
+# It returns structured workout data instead of only formatted strings.
 def generate_baseline_week(runner_info):
     weekly_mileage = choose_weekly_mileage(runner_info)
     long_run_distance = choose_long_run_distance(runner_info)
@@ -237,39 +238,64 @@ def generate_baseline_week(runner_info):
     if len(easy_days) > 0 and easy_run_distance < 2:
         easy_run_distance = 2
 
-    # Build the final schedule text.
+    # Build the final structured schedule.
     final_schedule = {}
 
     for day, run_type in structure.items():
         if run_type == "rest":
-            final_schedule[day] = "Rest"
+            final_schedule[day] = {
+                "type": "rest"
+            }
 
         elif run_type == "long":
             long_pace_low, long_pace_high = pace_targets["long"]
-            final_schedule[day] = (
-                f"{long_run_distance} mile long run "
-                f"at about {long_pace_low} to {long_pace_high}"
-            )
+            final_schedule[day] = {
+                "type": "long",
+                "distance": long_run_distance,
+                "pace_range": (long_pace_low, long_pace_high)
+            }
 
         elif run_type == "workout":
             workout_pace_low, workout_pace_high = pace_targets["workout"]
-            final_schedule[day] = (
-                f"{workout_distance} mile workout "
-                f"at about {workout_pace_low} to {workout_pace_high}"
-            )
+            final_schedule[day] = {
+                "type": "workout",
+                "distance": workout_distance,
+                "pace_range": (workout_pace_low, workout_pace_high)
+            }
 
         elif run_type == "easy":
             easy_pace_low, easy_pace_high = pace_targets["easy"]
-            final_schedule[day] = (
-                f"{easy_run_distance} mile easy run "
-                f"at about {easy_pace_low} to {easy_pace_high}"
-            )
+            final_schedule[day] = {
+                "type": "easy",
+                "distance": easy_run_distance,
+                "pace_range": (easy_pace_low, easy_pace_high)
+            }
 
     return final_schedule
 
+# This function turns one workout dictionary into a readable string.
+def format_workout(day, workout_data):
+    workout_type = workout_data["type"]
+
+    if workout_type == "rest":
+        return f"{day}: Rest"
+
+    pace_low, pace_high = workout_data["pace_range"]
+    distance = workout_data["distance"]
+
+    if workout_type == "easy":
+        return f"{day}: {distance} mile easy run at about {pace_low} to {pace_high}"
+
+    if workout_type == "long":
+        return f"{day}: {distance} mile long run at about {pace_low} to {pace_high}"
+
+    if workout_type == "workout":
+        return f"{day}: {distance} mile workout at about {pace_low} to {pace_high}"
+
+    return f"{day}: Unknown workout"
 
 # This function prints the generated week in a readable format.
 def print_week_plan(schedule):
     print("\n----- BASELINE TRAINING WEEK -----")
-    for day, workout in schedule.items():
-        print(f"{day}: {workout}")
+    for day, workout_data in schedule.items():
+        print(format_workout(day, workout_data))
