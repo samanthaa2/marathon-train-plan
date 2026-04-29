@@ -18,7 +18,6 @@ The long-term goal of the project is for the planner to update over time based o
 ## Files
 - `ui.py` - runs the graphical user interface for the project
 - `generator.py` - contains the logic for generating the baseline training week
-- `runner_info.py` - contains the original terminal-based runner input functions
 - `README.md` - explains the project and how to run it
 
 ## How to Run the Project
@@ -62,7 +61,7 @@ python3 ui.py''
 The next stage of the project is to let the user log completed workouts and use that data to adjust future weeks of training. The program will eventually take into account workout completion, actual distance, actual time, and effort level in order to make the training plan more adaptive.
 
 ## External Contributors / Sources
-I used ChatGPT to help organize code, debug logic, and understand how to build a graphical user interface with CustomTkinter. I reviewed, edited, and tested the code myself. 
+I used ChatGPT to help organize code, debug logic, and understand how to build a graphical user interface with CustomTkinter. I reviewed, edited, and tested the code myself.
 
 I also used the official CustomTkinter documentation as a reference while learning how to build the GUI:
 
