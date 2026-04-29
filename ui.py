@@ -166,6 +166,7 @@ def save_off_days_and_continue():
 
 
 # Save screen 3 data, generate the plan, and show the results.
+# MODIFIED 4/29
 def generate_plan():
     try:
         goal = goal_menu.get()
@@ -187,14 +188,15 @@ def generate_plan():
 
         screen3_error_label.configure(text="")
 
-        # Generate the plan using your existing Python logic.
+        # Generate the plan using existing Python logic--from generator.py
         baseline_week = generate_baseline_week(runner_info)
 
         # Clear any old results before inserting the new ones.
         results_box.delete("1.0", "end")
 
-        results_box.insert("end", "Runner Information:\n")
-        results_box.insert("end", f"{runner_info}\n\n")
+        # removed below info-- no need to display runner info like that
+        #results_box.insert("end", "Runner Information:\n")
+        #results_box.insert("end", f"{runner_info}\n\n")
 
         results_box.insert("end", "Week 1 Plan:\n")
         for day, workout in baseline_week.items():
@@ -474,7 +476,7 @@ screen3_generate_button.pack(pady=10)
 
 
 # -------------------------
-# RESULTS SCREEN-- UPDATES 4/29
+# RESULTS SCREEN
 # -------------------------
 
 results_frame = ctk.CTkFrame(app)
