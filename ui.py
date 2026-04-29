@@ -15,6 +15,8 @@ app.geometry("800x650")
 
 # This dictionary stores the user's information as they move through the screens.
 runner_info = {}
+# this dictionary stores the plan for the current week
+current_week_plan = {}
 
 
 # -------------------------
@@ -189,7 +191,8 @@ def generate_plan():
         screen3_error_label.configure(text="")
 
         # Generate the plan using existing Python logic--from generator.py
-        baseline_week = generate_baseline_week(runner_info)
+        global current_week_plan
+        current_week_plan = generate_baseline_week(runner_info)
 
         # Clear any old results before inserting the new ones.
         results_box.delete("1.0", "end")
@@ -202,7 +205,7 @@ def generate_plan():
         # I want the button to change color once the workout is complete
         # and if they want to move on to the next
         results_box.insert("end", "Week 1 Plan:\n")
-        for day, workout_data in baseline_week.items():
+        for day, workout_data in current_week_plan.items():
             results_box.insert("end", f"{format_workout(day, workout_data)}\n")
 
         show_results()
