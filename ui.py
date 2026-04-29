@@ -504,5 +504,5 @@ results_back_button.pack(pady=10)
 # Start on screen 1.
 show_screen1()
 
-# Run the app.
+# Run the app
 app.mainloop()
