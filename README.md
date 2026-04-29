@@ -5,7 +5,7 @@ For my final project, I created a marathon training planner that builds a person
 
 This program asks the user for information like their current weekly mileage, longest recent run, average pace, running availability, weeks until race day, goal, preferred long run day, and any required off days. Based on that information, it generates a baseline week of marathon training with easy runs, long runs, rest days, and workout days when appropriate.
 
-The long-term goal of the project is for the planner to update over time based on the user’s completed workouts. After each run, the user will be able to enter workout stats such as distance, time, and effort level, and the program will use that information to adjust future training weeks.
+The program also allows the user to log completed workouts and generate the next week of training using updated information from the previous week. After each run, the user can enter workout data such as actual distance and actual average pace, and the planner uses that information to update future weeks.
 
 ## Current Features
 - Collects runner information through a multi-step graphical user interface
@@ -14,10 +14,14 @@ The long-term goal of the project is for the planner to update over time based o
 - Uses the runner’s current mileage, pace, and schedule constraints to shape the plan
 - Allows the user to specify required off days and a preferred long run day
 - Supports both a finish goal and an improve-time goal
+- Lets the user log completed workouts from the generated plan
+- Generates future training weeks using updated workout data from the previous week
 
 ## Files
 - `ui.py` - runs the graphical user interface for the project
-- `generator.py` - contains the logic for generating the baseline training week
+- `generator.py` - contains the logic for generating each training week
+- `updater.py` - updates runner information based on logged workouts from the previous week
+- `runner_info.py` - contains the original terminal-based runner input functions
 - `README.md` - explains the project and how to run it
 
 ## How to Run the Project
@@ -56,9 +60,11 @@ python3 ui.py''
 5. Select your training goal
 6. Generate your baseline week 1 training plan
 7. View the generated schedule in the app
+8. Click on workout buttons to log completed runs
+9. Generate the next week of training based on the updated workout data
 
-## Future Plans
-The next stage of the project is to let the user log completed workouts and use that data to adjust future weeks of training. The program will eventually take into account workout completion, actual distance, actual time, and effort level in order to make the training plan more adaptive.
+## If I Had More Time I Would:
+Have more information input with the workout data and used to update following week run plans. While this is quite simple to implement in code, I wasn't sure how factors like perceived effort needed to be interpretted in suggested workouts, and unfortunately did not have the time to research it. I would also have added a summary screen at the end (like maybe number of runs completed, total miles run, words of encouragement, etc.).
 
 ## External Contributors / Sources
 I used ChatGPT to help organize code, debug logic, and understand how to build a graphical user interface with CustomTkinter. I reviewed, edited, and tested the code myself.
