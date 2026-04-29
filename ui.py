@@ -79,6 +79,38 @@ def go_back_from_screen3():
     else:
         show_screen2()
 
+# This function creates the workout display on the results screen.
+# Run days become buttons, and rest days become labels.
+def display_week_plan():
+    # Clear old widgets from the workout area.
+    for widget in workout_buttons_frame.winfo_children():
+        widget.destroy()
+
+    week_title_label.configure(text=f"Week {current_week_number} Plan")
+
+    for day, workout_data in current_week_plan.items():
+        workout_type = workout_data["type"]
+
+        if workout_type == "rest":
+            day_label = ctk.CTkLabel(
+                workout_buttons_frame,
+                text=f"{day}: Rest",
+                font=("Arial", 16)
+            )
+            day_label.pack(pady=6)
+
+        else:
+            workout_text = format_workout(day, workout_data)
+
+            workout_button = ctk.CTkButton(
+                workout_buttons_frame,
+                text=workout_text,
+                command=lambda d=day: open_log_workout_popup(d),
+                width=600,
+                height=40
+            )
+            workout_button.pack(pady=6)
+
 
 # -------------------------
 # NAVIGATION FUNCTIONS
