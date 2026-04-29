@@ -552,6 +552,87 @@ results_back_button = ctk.CTkButton(
 )
 results_back_button.pack(pady=10)
 
+# -------------------------
+# WORKOUT DISPLAY
+# -------------------------
+
+# This function opens a popup window so the user can log workout results for one day.
+def open_log_workout_popup(day):
+    popup = ctk.CTkToplevel(app)
+    popup.title(f"Log Workout - {day}")
+    popup.geometry("400x350")
+
+    popup_title = ctk.CTkLabel(
+        popup,
+        text=f"Log Workout for {day}",
+        font=("Arial", 20)
+    )
+    popup_title.pack(pady=20)
+
+    completed_label = ctk.CTkLabel(
+        popup,
+        text="Did you complete this workout?"
+    )
+    completed_label.pack(pady=(10, 5))
+
+    completed_menu = ctk.CTkOptionMenu(
+        popup,
+        values=["yes", "no"],
+        width=200
+    )
+    completed_menu.pack(pady=5)
+
+    distance_label = ctk.CTkLabel(
+        popup,
+        text="Actual distance run (miles):"
+    )
+    distance_label.pack(pady=(10, 5))
+
+    distance_entry = ctk.CTkEntry(popup, width=200)
+    distance_entry.pack(pady=5)
+
+    pace_label = ctk.CTkLabel(
+        popup,
+        text="Actual average pace (minutes per mile):"
+    )
+    pace_label.pack(pady=(10, 5))
+
+    pace_entry = ctk.CTkEntry(popup, width=200)
+    pace_entry.pack(pady=5)
+
+    error_label = ctk.CTkLabel(
+        popup,
+        text="",
+        text_color="red"
+    )
+    error_label.pack(pady=10)
+
+    def save_workout():
+        completed_value = completed_menu.get()
+
+        if completed_value == "no":
+            log_workout(day, False, 0.0, None)
+            popup.destroy()
+            return
+
+        try:
+            actual_distance = float(distance_entry.get())
+            actual_pace = float(pace_entry.get())
+
+            log_workout(day, True, actual_distance, actual_pace)
+            popup.destroy()
+
+        except ValueError:
+            error_label.configure(
+                text="Please enter valid numbers for distance and pace."
+            )
+
+    save_button = ctk.CTkButton(
+        popup,
+        text="Save Workout",
+        command=save_workout
+    )
+    save_button.pack(pady=15)
 
 # Start on screen 1.
 show_screen1()
