@@ -198,6 +198,7 @@ def generate_plan():
         #results_box.insert("end", "Runner Information:\n")
         #results_box.insert("end", f"{runner_info}\n\n")
 
+        ### TO DO: 
         results_box.insert("end", "Week 1 Plan:\n")
         for day, workout in baseline_week.items():
             results_box.insert("end", f"{day}: {workout}\n")
