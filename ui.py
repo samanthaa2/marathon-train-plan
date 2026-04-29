@@ -212,8 +212,9 @@ def log_workout(day, completed, actual_distance, actual_pace):
     }
 
 # Save screen 3 data, generate the plan, and show the results.
-# MODIFIED 4/29
 def generate_plan():
+    global current_week_plan, workout_log
+
     try:
         goal = goal_menu.get()
         runner_info["goal"] = goal
@@ -234,25 +235,14 @@ def generate_plan():
 
         screen3_error_label.configure(text="")
 
-        # Generate the plan using existing Python logic--from generator.py
-        global current_week_plan
+        # Generate the plan using existing Python logic.
         current_week_plan = generate_baseline_week(runner_info)
 
-        # Clear any old results before inserting the new ones.
-        results_box.delete("1.0", "end")
-
-        # removed below info-- no need to display runner info like that
-        #results_box.insert("end", "Runner Information:\n")
-        #results_box.insert("end", f"{runner_info}\n\n")
-
-        ### TO DO: MAKE THE OUTPUT SQAURE, like a calendar, so the user can click on each button to input workout info
-        # I want the button to change color once the workout is complete
-        # and if they want to move on to the next
-        results_box.insert("end", "Week 1 Plan:\n")
-        for day, workout_data in current_week_plan.items():
-            results_box.insert("end", f"{format_workout(day, workout_data)}\n")
+        # Clear the old workout log whenever a new week is generated.
+        workout_log = {}
 
         show_results()
+        display_week_plan()
 
     except ValueError:
         screen3_error_label.configure(
