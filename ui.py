@@ -2,7 +2,7 @@ import customtkinter as ctk
 import tkinter as tk
 
 # Import the function that generates the baseline week from your planning file.
-from generator import generate_baseline_week
+from generator import generate_baseline_week, format_workout
 
 # Set the appearance and color theme of the app.
 ctk.set_appearance_mode("light")
@@ -202,8 +202,8 @@ def generate_plan():
         # I want the button to change color once the workout is complete
         # and if they want to move on to the next
         results_box.insert("end", "Week 1 Plan:\n")
-        for day, workout in baseline_week.items():
-            results_box.insert("end", f"{day}: {workout}\n")
+        for day, workout_data in baseline_week.items():
+            results_box.insert("end", f"{format_workout(day, workout_data)}\n")
 
         show_results()
 
