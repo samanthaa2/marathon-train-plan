@@ -521,19 +521,15 @@ screen3_generate_button.pack(pady=10)
 
 results_frame = ctk.CTkFrame(app)
 
-results_title = ctk.CTkLabel(
+week_title_label = ctk.CTkLabel(
     results_frame,
-    text="Your Week 1 Plan",
+    text="Week 1 Plan",
     font=("Arial", 24)
 )
-results_title.pack(pady=20)
+week_title_label.pack(pady=20)
 
-results_box = ctk.CTkTextbox(
-    results_frame,
-    width=650,
-    height=350
-)
-results_box.pack(pady=20)
+workout_buttons_frame = ctk.CTkFrame(results_frame)
+workout_buttons_frame.pack(pady=20, fill="both", expand=True)
 
 results_back_button = ctk.CTkButton(
     results_frame,
