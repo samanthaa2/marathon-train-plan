@@ -17,6 +17,10 @@ app.geometry("800x650")
 runner_info = {}
 # this dictionary stores the plan for the current week
 current_week_plan = {}
+# dictionary that stores workout data for users current training week
+workout_log = {}
+# variable that stores the current week number for tracking purposes
+current_week_number = 1
 
 
 # -------------------------
