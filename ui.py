@@ -546,7 +546,7 @@ results_back_button.pack(pady=10)
 def open_log_workout_popup(day):
     popup = ctk.CTkToplevel(app)
     popup.title(f"Log Workout - {day}")
-    popup.geometry("400x350")
+    popup.geometry("400x450")
 
     popup_title = ctk.CTkLabel(
         popup,
