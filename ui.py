@@ -1,8 +1,11 @@
 import customtkinter as ctk
 import tkinter as tk
 
-# Import the function that generates the baseline week from your planning file.
+# Import the function that generates the baseline week from planning file.
 from generator import generate_baseline_week, format_workout
+
+# Import the updaring function from updater
+from updater import update_runner_info
 
 # Set the appearance and color theme of the app.
 ctk.set_appearance_mode("light")
