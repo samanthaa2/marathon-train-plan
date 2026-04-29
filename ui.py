@@ -198,7 +198,9 @@ def generate_plan():
         #results_box.insert("end", "Runner Information:\n")
         #results_box.insert("end", f"{runner_info}\n\n")
 
-        ### TO DO: 
+        ### TO DO: MAKE THE OUTPUT SQAURE, like a calendar, so the user can click on each button to input workout info
+        # I want the button to change color once the workout is complete
+        # and if they want to move on to the next
         results_box.insert("end", "Week 1 Plan:\n")
         for day, workout in baseline_week.items():
             results_box.insert("end", f"{day}: {workout}\n")
