@@ -171,6 +171,14 @@ def save_off_days_and_continue():
     show_screen3()
 
 
+# This function stores the completed workout data for one day.
+def log_workout(day, completed, actual_distance, actual_pace):
+    workout_log[day] = {
+        "completed": completed,
+        "actual_distance": actual_distance,
+        "actual_pace": actual_pace
+    }
+
 # Save screen 3 data, generate the plan, and show the results.
 # MODIFIED 4/29
 def generate_plan():
