@@ -252,6 +252,26 @@ def generate_plan():
             text="Please enter valid goal information."
         )
 
+# This function uses the logged workout data to update the runner info
+# and generate the next week's plan.
+def generate_next_week():
+    global runner_info, current_week_plan, workout_log, current_week_number
+
+    # Update the runner info based on completed workouts.
+    runner_info = update_runner_info(runner_info, workout_log)
+
+    # Generate the next week's plan.
+    current_week_plan = generate_baseline_week(runner_info)
+
+    # Reset the workout log for the new week.
+    workout_log = {}
+
+    # Increase the week number.
+    current_week_number += 1
+
+    # Refresh the results screen.
+    display_week_plan()
+
 
 # -------------------------
 # SCREEN 1: CURRENT TRAINING
@@ -524,15 +544,29 @@ screen3_generate_button.pack(pady=10)
 
 results_frame = ctk.CTkFrame(app)
 
+results_title = ctk.CTkLabel(
+    results_frame,
+    text="Your Training Plan",
+    font=("Arial", 24)
+)
+results_title.pack(pady=20)
+
 week_title_label = ctk.CTkLabel(
     results_frame,
     text="Week 1 Plan",
-    font=("Arial", 24)
+    font=("Arial", 20)
 )
-week_title_label.pack(pady=20)
+week_title_label.pack(pady=10)
 
 workout_buttons_frame = ctk.CTkFrame(results_frame)
 workout_buttons_frame.pack(pady=20, fill="both", expand=True)
+
+next_week_button = ctk.CTkButton(
+    results_frame,
+    text="Generate Next Week",
+    command=generate_next_week
+)
+next_week_button.pack(pady=10)
 
 results_back_button = ctk.CTkButton(
     results_frame,
